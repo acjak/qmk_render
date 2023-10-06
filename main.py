@@ -13,7 +13,7 @@ Window.size=(1000,500)
 BASE_KEY_SIZE =14  # Size of a 1U key in pixels
 
 class KeyboardLayout(FloatLayout):
-    def __init__(self, keymap_file, keycode_file, keycode_extra_file, **kwargs):
+    def __init__(self, keymap_file, qmk_dir, keycode_file, keycode_extra_file, **kwargs):
         super(KeyboardLayout, self).__init__(**kwargs)
         self.layer = 0
 
@@ -22,7 +22,7 @@ class KeyboardLayout(FloatLayout):
             self.keymap_data = hjson.load(file)
 
         keyboard = self.keymap_data['keyboard']
-        info_file = f"/Users/andcj/qmk_firmware/keyboards/{keyboard}/info.json"
+        info_file = f"{qmk_dir}/keyboards/{keyboard}/info.json"
 
         with open(info_file, 'r') as file:
             self.info_data = hjson.load(file)
@@ -100,9 +100,6 @@ class KeyboardLayout(FloatLayout):
         self.clear_widgets()
         self.render_layout(layer=self.layer)
 
-
-
-
 class KeyboardApp(App):
     def __init__(self, keymap_file="", **kwargs):
         super(KeyboardApp, self).__init__(**kwargs)
@@ -118,6 +115,7 @@ class KeyboardApp(App):
         keycode_extra_file = os.path.join(qmk_dir, 'data', 'constants', 'keycodes', 'extras', 'keycodes_us_0.0.1.hjson')
         return KeyboardLayout(
             keymap_file=self.keymap_file,
+            qmk_dir=qmk_dir,
             keycode_file=keycode_file,
             keycode_extra_file=keycode_extra_file)
 
